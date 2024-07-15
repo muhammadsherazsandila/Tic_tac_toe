@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>*{
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        box-sizing: border-box;
+    }
+    body{
+        background-color: #222;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        transition: 1s;
+    }
+    #gameHeading{
+        text-align: center;
+        color: aqua;
+        border-bottom: 2px solid orange;
+    }
+    
+    #container{
+        width: 300px;
+        height: 250px;
+        margin: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        margin-top: 30px;
+        border: 2px solid orange;
+        border-radius: 5px;
+        outline: none;
+        animation: animate 0.8s ease-in;
+    }
+    @keyframes animate {
+        from{transform: scale(0)}
+        to{transform: scale(1)}
+    }
+    .buttons{
+        font-size: 30px;
+        background-color: #8f8f8f;
+        outline: none;
+        color: white;
+        animation: btnAnimate 1s ease-in;
+        border: 2px solid orange;
+    }
+    @keyframes btnAnimate {
+        from{transform: scale(0)}
+        to{transform: scale(1)}
+    }
+    .btn{
+        width: 150px;
+        margin: auto;
+        display: block;
+        font-size: 20px;
+        background-color: orange;
+        color: white;
+        padding: 8px;
+        margin-top: 20px;
+        border: none;
+        outline: none;
+        border-radius: 4px;
+        cursor: pointer;
+        animation: buttonAnimat 1s;
+    }
+    .btn:active{
+        opacity: 0.9;
+    }
+    @keyframes buttonAnimate {
+        from{transform: scale(0);}
+        to{transform: scale(1);}
+    }
+    #winnerContainer{
+        display: none;
+    }
+    #winningMessage{
+        color: white;
+        text-align: center;
+        margin-top: 10px;
+        animation: ani 0.8s;
+    }
+    @keyframes ani {
+        from{transform: scale(0)}
+        to{transform: scale(1);}
+    }
+    
+    #playAgainButton{
+        display: none;
+        animation: annni 1s;
+    }
+    @keyframes annni {
+        from{transform: scale(0)}
+        to{transform: scale(1)}
+    }
+    .playGameButtonHide{
+        animation: playGameButtonHideAni 1s;
+    }
+    @keyframes playGameButtonHideAni {
+        from{transform: scale(1)}
+        to{transform: scale(-1)}
+    }
+    #programmer{
+        color: red;
+        text-align: center;
+        border: none;
+        outline: none;
+        margin-top: 30px;
+        animation: programmerAnimate 4s infinite  ease-in-out;
+        animation-direction: alternate;
+    }
+    @keyframes programmerAnimate {
+        0%{
+            transform: rotate(15deg);
+        }
+        100%{
+            transform: rotate(-15deg);
+        }
+    }
+    #firstName{
+        color: orange;
+    }
+    #secondName{
+        color: aqua;
+    }
+    #player{
+        text-align: center;
+        margin-top: 20px;
+    }
+    .players{
+        color: black;
+        background-color: white;
+        width: 80px;
+        font-size: 20px;
+        padding: 3px;
+        border: none;
+        outline: none;
+    }
+    #changingButton2{
+        background-color: white;
+        border-radius: 15px 0px 0px 15px;
+        margin-left: -11px;
+        z-index: -10;
+    }
+    #changingButton1{
+        background-color: orange;
+        border-radius: 0px 15px 15px 0px;
+        margin-right: -11px;
+        z-index: +10;
+    }
+    #gameHeadingColor{
+        color: white;
+    }</style>
+</head>
+<body>
+    <div id="wholeContainer">
+        <h2 id="gameHeading"><span id="gameHeadingColor">Tic </span>Tac-Toe</h2>
+        <div id="winnerContainer">
+            <h3 id="winningMessage"></h3>
+        </div>
+        <div id="player">
+            <button class="players" id="changingButton1">x</button><button class="players" id="changingButton2">o</button>
+        </div>
+        <div id="container">
+            <button id="btn1" class="buttons"></button>
+            <button id="btn2" class="buttons"></button>
+            <button id="btn3" class="buttons"></button>
+            <button id="btn4" class="buttons"></button>
+            <button id="btn5" class="buttons"></button>
+            <button id="btn6" class="buttons"></button>
+            <button id="btn7" class="buttons"></button>
+            <button id="btn8" class="buttons"></button>
+            <button id="btn9" class="buttons"></button>
+        </div>    
+        <button id="playGameButton" class="btn">Play Game</button>
+        <button id="playAgainButton" class="btn" onclick="resetValues()">Play Again</button>
+        <h3 id="programmer">!!!<span id="firstName">Sandila</span><span id="secondName"> Programming</span>!!!</h3>
+    </div>
+    <audio id="buttonAudio">
+        <source src="./audio/buttonClick.wav" type="audio/wav">
+    </audio>
+    <audio id="buttonAudio1">
+        <source src="./audio/buttonClick2.wav" type="audio/wav">
+    </audio>
+    <audio id="winnerAudio">
+        <source src="./audio/win.wav" type="audio/wav">
+    </audio>
+    <audio id="playAgainAudio">
+        <source src="./audio/playAgain.wav" type="audio/wav">
+    </audio>
+    <audio id="playGameAudio">
+        <source src="./audio/playGame.wav" type="audio/wav">
+    </audio>
+    <audio id="GameBackgroundAudio">
+        <source src="./audio/gameBackgroun.mp3" type="audio/mp3">
+    </audio>
+</body>
+<script>
+    let buttons = document.querySelectorAll('.buttons')
+    let changingButton1 = document.getElementById('changingButton1')
+    let changingButton2 = document.getElementById('changingButton2')
+    const buttonAudio = document.getElementById('buttonAudio')
+    const buttonAudio1 = document.getElementById('buttonAudio1')
+    const winnerAudio = document.getElementById('winnerAudio')
+    const playAgainAudio = document.getElementById('playAgainAudio')
+    const playGameAudio = document.getElementById('playGameAudio')
+    const GameBackgroundAudio = document.getElementById('GameBackgroundAudio')
+    let turn = true
+    let startGame = ()=>{
+        buttons.forEach((button) =>{
+            button.addEventListener('click',()=>{
+                if(turn === true){
+                    buttonAudio.play()
+                    button.innerHTML = 'x'
+                    button.style.color = 'white'
+                    changingButton1.style.background = 'orange'
+                    changingButton2.style.background = 'white'
+                    turn = false
+                }else{
+                    buttonAudio1.play()
+                    button.innerHTML = 'o'
+                    button.style.color = 'white'
+                    changingButton1.style.background = 'white'
+                    changingButton2.style.background = 'orange'
+                    turn = true
+                }
+                button.disabled = true
+                checkWinner()
+            })
+        })
+    }
+    let totalPattern = [
+        [0,1,2],[0,3,6],
+        [1,4,7],[2,5,8],
+        [3,4,5],[6,7,8],
+        [0,4,8],[2,4,6]
+    ]
+    let index = 0;
+    const checkWinner = ()=>{
+        for(pattern of totalPattern){
+            let val1 = buttons[pattern[0]].innerHTML
+            let val2 = buttons[pattern[1]].innerHTML
+            let val3 = buttons[pattern[2]].innerHTML
+            if(val1 != '' && val2 != '' && val3 != ''){
+                if(val1 == val2 && val2 == val3){
+                    winningMessage.style.display = 'block'
+                    let winnerContainer = document.getElementById('winnerContainer')
+                    winningMessage.innerHTML = `Player ${val1} Win`
+                    winnerContainer.style.display = 'block'
+                    buttons[pattern[0]].style.background = 'aqua'
+                    buttons[pattern[1]].style.background = 'aqua'
+                    buttons[pattern[2]].style.background = 'aqua'
+                    buttons[pattern[0]].style.color = 'black'
+                    buttons[pattern[1]].style.color = 'black'
+                    buttons[pattern[2]].style.color = 'black'
+                    saveFromAgainClick()
+                    buttonShow()
+                    winnerAudio.play()
+                    GameBackgroundAudio.pause()
+                    index = -1;
+                }
+            }
+        }
+        index = index + 1;
+        if(index === 9){
+            playAgainButton.style.display = 'block'
+            index= 0;
+            playAgainAudio.play()
+        }
+    }
+    function saveFromAgainClick(){
+        for(let e = 0;e<buttons.length;e++){
+            buttons[e].disabled = true
+        }
+    }
+    let playGameButton = document.getElementById('playGameButton')
+    playGameButton.addEventListener('click',()=>{
+        playGameAudio.play()
+        GameBackgroundAudio.play()
+        playGameButton.classList.toggle('playGameButtonHide')
+        startGame()
+        setInterval(() => {
+            playGameButton.style.display = 'none'
+        }, 300);
+
+    })
+    let playAgainButton = document.getElementById('playAgainButton')
+    playAgainButton.addEventListener('click',()=>{
+        playGameAudio.play()
+        GameBackgroundAudio.play()
+    })
+    function buttonShow (){
+        playAgainButton.style.display = 'block'
+        index = -1
+    }
+    let winningMessage = document.getElementById('winningMessage')
+    function resetValues(){
+        buttons.forEach(
+            (button) =>{
+                button.innerHTML = ''
+                button.style.background = 'gray'
+                button.disabled = false
+            }
+        )
+        winningMessage.style.display = 'none'
+        playAgainButton.style.display = 'none'
+    }
+
+    </script>
+</html>
